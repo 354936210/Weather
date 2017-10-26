@@ -1,10 +1,12 @@
 package com.owangwang.weather.db;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Created by wangchao on 2017/10/26.
  */
 
-public class County {
+public class County extends DataSupport {
     private int id;
     private String countyName;
     private String weatherId;
