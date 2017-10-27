@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.owangwang.weather.db.City;
 import com.owangwang.weather.db.County;
 import com.owangwang.weather.db.Province;
+import com.owangwang.weather.event.FragmentToActivityEvent;
 import com.owangwang.weather.util.HttpUtil;
 import com.owangwang.weather.util.Utility;
 
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -110,6 +112,7 @@ public class ChooseAreaFragment extends Fragment {
                         activity.swipeRefresh.setRefreshing(true);
                         activity.requestWeather(weatherId);
                     }
+                    EventBus.getDefault().post(new FragmentToActivityEvent(weatherId));
 
                 }
             }

@@ -9,6 +9,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.owangwang.weather.event.FragmentToActivityEvent;
 import com.owangwang.weather.gson.Forecast;
 import com.owangwang.weather.gson.Weather;
 import com.owangwang.weather.service.AutoUpdateService;
@@ -27,6 +30,7 @@ import com.owangwang.weather.util.Utility;
 
 import java.io.IOException;
 
+import de.greenrobot.event.EventBus;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -52,6 +56,7 @@ private ScrollView weatherLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
 //        if(Build.VERSION.SDK_INT>=21){
 //            View decorView=getWindow().getDecorView();
 //            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -89,8 +94,10 @@ private ScrollView weatherLayout;
             //有缓存时直接读取天气情况
             Weather weather= Utility.handleWeatherResponse(weatherString);
             mWeatherId=weather.basic.weatherId;
+
             showWeatherInfo(weather);
         }else {
+
              mWeatherId=getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE);
             requestWeather(mWeatherId);
@@ -190,7 +197,8 @@ private ScrollView weatherLayout;
 
             forecastLayout.removeAllViews();
             for (Forecast forecast:weather.forecastList){
-                View view= LayoutInflater.from(this).inflate(R.layout.forecast_iterm,forecastLayout,false);
+                View view= LayoutInflater.from(this)
+                        .inflate(R.layout.forecast_iterm,forecastLayout,false);
                 TextView dateText=view.findViewById(R.id.date_text);
                 TextView infoText=view.findViewById(R.id.info_text);
                 TextView maxText=view.findViewById(R.id.max_text);
@@ -235,5 +243,19 @@ private ScrollView weatherLayout;
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+    public void onEventMainThread(FragmentToActivityEvent event) {
+    if (!TextUtils.isEmpty(event.getMessage())&event.getMessage()!=null){
+        mWeatherId=event.getMessage();
+        Log.d("调试输出","EventBus接收到的值:"+event.getMessage());
+    }
+
+
     }
 }
