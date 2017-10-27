@@ -254,7 +254,5 @@ private ScrollView weatherLayout;
         mWeatherId=event.getMessage();
 
     }
-
-
     }
 }
