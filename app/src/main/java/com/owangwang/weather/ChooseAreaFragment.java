@@ -1,7 +1,8 @@
-package com.owangwang.weather.db;
+package com.owangwang.weather;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +17,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.owangwang.weather.R;
+import com.owangwang.weather.db.City;
+import com.owangwang.weather.db.County;
+import com.owangwang.weather.db.Province;
 import com.owangwang.weather.util.HttpUtil;
 import com.owangwang.weather.util.Utility;
 
@@ -94,6 +97,12 @@ public class ChooseAreaFragment extends Fragment {
                 }else if(currentLevel==LEVEL_CITY){
                     selectCity=cityList.get(position);
                     queryCounties();
+                }else if(currentLevel==LEVEL_COUNTY){
+                    String weatherId=countyList.get(position).getWeatherId();
+                    Intent intent=new Intent(getActivity(),WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
