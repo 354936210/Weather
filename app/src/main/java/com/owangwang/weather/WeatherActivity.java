@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -253,7 +252,7 @@ private ScrollView weatherLayout;
     public void onEventMainThread(FragmentToActivityEvent event) {
     if (!TextUtils.isEmpty(event.getMessage())&event.getMessage()!=null){
         mWeatherId=event.getMessage();
-        Log.d("调试输出","EventBus接收到的值:"+event.getMessage());
+
     }
 
 
